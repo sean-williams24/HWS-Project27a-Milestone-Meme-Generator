@@ -99,7 +99,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             let attrs: [NSAttributedString.Key: Any] = [
                 .font: UIFont.systemFont(ofSize: 70),
-                .paragraphStyle: allignment
+                .strokeWidth: 10,
+                .paragraphStyle: allignment,
+                .foregroundColor: UIColor.white
             ]
             
 //            ctx.cgContext.translateBy(x: image.size.width / 2, y: image.size.height / 2)
