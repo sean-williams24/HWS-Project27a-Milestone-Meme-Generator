@@ -55,8 +55,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             ac.addAction(UIAlertAction(title: "Add Text", style: .default, handler: { (action) in
                 guard let text = ac.textFields?[0].text else { return }
                 self.topLabel.text = text
-                self.memeTopText = text
+                
+                let ac2 = UIAlertController(title: "Bottom Meme Text", message: "If you wish, please eneter text for bottom of meme.", preferredStyle: .alert)
+                ac2.addAction(UIAlertAction(title: "Leave Blank", style: .cancel))
+                ac2.addTextField()
+                ac2.addAction(UIAlertAction(title: "Add Text", style: .default, handler: { (action) in
+                    guard let bottomText = ac2.textFields?[0].text else { return }
+                    self.bottomLabel.text = bottomText
+                }))
+                
+                self.present(ac2 , animated: true)
             }))
+            
+            present(ac, animated: true)
+            
+
         }
     }
     
