@@ -24,6 +24,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareMeme))
+        
         let ac = UIAlertController(title: "Create Your Meme", message: "Please import a picture from your library...", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Select Picture", style: .default, handler: imagePicker(alert:)))
         present(ac, animated: true)
@@ -35,6 +37,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         picker.allowsEditing = true
         picker.sourceType = .photoLibrary
         present(picker, animated: true)
+    }
+    
+    
+    @objc func shareMeme() {
+        let ac = UIActivityViewController(activityItems: [generateMeme()!], applicationActivities: nil)
+        present(ac, animated: true)
+        imageView.image = generateMeme()
     }
     
     
@@ -76,26 +85,33 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     //Core Graphics
     
-    func addTextToMeme() {
-        guard let size = imageView.image?.size else { return }
+    func generateMeme() -> UIImage? {
+        guard let image = imageView.image else { return nil}
         
-        let renderer = UIGraphicsImageRenderer(size: size)
+        let renderer = UIGraphicsImageRenderer(size: image.size)
         let img = renderer.image { ctx in
+//            guard let image = imageView.image else { return }
             
+            image.draw(at: CGPoint(x: 0, y: 0))
             
             let allignment = NSMutableParagraphStyle()
             allignment.alignment = .center
             
             let attrs: [NSAttributedString.Key: Any] = [
-                .font: "Chalkduster",
+                .font: UIFont.systemFont(ofSize: 70),
                 .paragraphStyle: allignment
             ]
             
-            let attributedString = NSAttributedString(string: memeTopText, attributes: attrs)
-            attributedString.draw(with: CGRect(x: 0, y: 0, width: 200, height: 200), options: .usesLineFragmentOrigin, context: nil)
+//            ctx.cgContext.translateBy(x: image.size.width / 2, y: image.size.height / 2)
+            
+            let topAttributedString = NSAttributedString(string: topLabel.text ?? "", attributes: attrs)
+            topAttributedString.draw(with: CGRect(x: 10, y: 30, width: image.size.width - 10, height: 200), options: .usesLineFragmentOrigin, context: nil)
+            
+            let bottomAttributedString = NSAttributedString(string: bottomLabel.text ?? "", attributes: attrs)
+            bottomAttributedString.draw(with: CGRect(x: 10, y: image.size.height - 100, width: image.size.width - 10, height: 200), options: .usesLineFragmentOrigin, context: nil)
             
         }
-        
+        return img
     }
 }
 
